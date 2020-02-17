@@ -85,8 +85,8 @@ function VideoUploadPage(props) {
       title: vidoeTitle,
       description: description,
       privacy: _private,
-      filePath: category,
-      category: filePath,
+      filePath: filePath,
+      category: category,
       duration: duration,
       thumbnail: thumbnailPath
     };
