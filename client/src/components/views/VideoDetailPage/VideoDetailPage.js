@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Row, Col, List, Avatar } from "antd";
 import Axios from "axios";
 import SideVideo from "./Sections/SideVideo";
+import Subscribe from "./Sections/Subscribe";
 
 const VideoDetailPage = props => {
   const [videoDetail, setVideoDetail] = useState([]);
@@ -30,7 +31,9 @@ const VideoDetailPage = props => {
               controls
             />
 
-            <List.Item actions>
+            <List.Item
+              actions={[<Subscribe userTo={videoDetail.writer._id} />]}
+            >
               <List.Item.Meta
                 avatar={<Avatar src={videoDetail.writer.image} />}
                 title={videoDetail.writer.name}
