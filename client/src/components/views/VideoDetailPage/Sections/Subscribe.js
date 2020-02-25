@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
 
-const Subscribe = ({ userTo }) => {
+const Subscribe = ({ userTo, userFrom }) => {
   const [subscribeNumber, setSubscribeNumber] = useState(0);
   const [subscribed, setSubscribed] = useState(false);
 
@@ -19,11 +19,11 @@ const Subscribe = ({ userTo }) => {
 
     let subscribedVariable = {
       userTo,
-      userFrom: localStorage.getItem("userId")
+      userFrom
     };
     Axios.post(`/api/subscribe/subscribed`, subscribedVariable).then(res => {
       if (res.data.success) {
-        setSubscribed(res.data.subscribed);
+        setSubscribed(res.data.subscribe);
       } else {
         alert("정보를 받아오지 못했습니다.");
       }
@@ -33,11 +33,11 @@ const Subscribe = ({ userTo }) => {
   const onSubscribe = () => {
     let subscribeVariable = {
       userTo: userTo,
-      userFrom: localStorage.getItem("userId")
+      userFrom: userFrom
     };
 
     if (subscribed) {
-      // 아마 구독중이라면
+      //이미 구독중이라면
       Axios.post(`/api/subscribe/unSubscribe`, subscribeVariable).then(res => {
         if (res.data.success) {
           setSubscribeNumber(subscribeNumber - 1);
@@ -47,7 +47,7 @@ const Subscribe = ({ userTo }) => {
         }
       });
     } else {
-      // 어작 구독중이 아니라면
+      // 아직 구독중이 아니라면
       Axios.post(`/api/subscribe/subscribe`, subscribeVariable).then(res => {
         if (res.data.success) {
           setSubscribeNumber(subscribeNumber + 1);
@@ -63,7 +63,7 @@ const Subscribe = ({ userTo }) => {
     <div>
       <button
         style={{
-          backgroundColor: `${!subscribed ? "#AAAAAA" : "#CC0000"}`,
+          backgroundColor: `${subscribed ? "#AAAAAA" : "#CC0000"}`,
           borderRadius: "4px",
           color: "white",
           padding: "10px 16px",

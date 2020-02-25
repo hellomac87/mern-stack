@@ -5,16 +5,22 @@ import Axios from "axios";
 const { Title } = Typography;
 const { Meta } = Card;
 
-function LandingPage() {
+const SubscriptionPage = () => {
   const [videos, setVideos] = useState([]);
   useEffect(() => {
-    Axios.get("/api/video/getVideos").then(res => {
-      if (res.data.success) {
-        setVideos(res.data.videos);
-      } else {
-        alert("비디오 가져오기를 실패 했습니다.");
+    //
+    let subscriptionVariables = {
+      userFrom: localStorage.getItem("userId")
+    };
+    Axios.post("/api/video/getSubscriptionVideos", subscriptionVariables).then(
+      res => {
+        if (res.data.success) {
+          setVideos(res.data.videos);
+        } else {
+          alert("비디오 가져오기를 실패 했습니다.");
+        }
       }
-    });
+    );
   }, []);
 
   const renderCards = videos.map((video, index) => {
@@ -57,6 +63,6 @@ function LandingPage() {
       </div>
     </>
   );
-}
+};
 
-export default LandingPage;
+export default SubscriptionPage;

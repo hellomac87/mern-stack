@@ -32,7 +32,12 @@ const VideoDetailPage = props => {
             />
 
             <List.Item
-              actions={[<Subscribe userTo={videoDetail.writer._id} />]}
+              actions={[
+                <Subscribe
+                  userTo={videoDetail.writer._id}
+                  userFrom={localStorage.getItem("userId")}
+                />
+              ]}
             >
               <List.Item.Meta
                 avatar={<Avatar src={videoDetail.writer.image} />}

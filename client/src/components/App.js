@@ -9,6 +9,7 @@ import NavBar from "./views/NavBar/NavBar";
 import Footer from "./views/Footer/Footer";
 import VideoUploadPage from "./views/VideoUploadPage/VideoUploadPage";
 import VideoDetailPage from "./views/VideoDetailPage/VideoDetailPage";
+import SubscriptionPage from "./views/SubscriptionPage/SubscriptionPage";
 
 function App() {
   return (
@@ -28,6 +29,11 @@ function App() {
             exact
             path="/video/:videoId"
             component={Auth(VideoDetailPage, null)}
+          />
+          <Route
+            exact
+            path="/subscription"
+            component={Auth(SubscriptionPage, null)}
           />
         </Switch>
       </div>

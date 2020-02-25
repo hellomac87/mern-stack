@@ -30,7 +30,6 @@ router.post("/subscribed", (req, res) => {
 });
 
 router.post("/unSubscribe", (req, res) => {
-  console.log("aaaaaaaa");
   Subscriber.findOneAndDelete({
     userTo: req.body.userTo,
     userFrom: req.body.userFrom
@@ -41,7 +40,6 @@ router.post("/unSubscribe", (req, res) => {
 });
 
 router.post("/subscribe", (req, res) => {
-  console.log("aaaaaaaa");
   const subscribe = new Subscriber(req.body);
   subscribe.save((err, doc) => {
     if (err) return res.status(400).json({ success: false, err });
