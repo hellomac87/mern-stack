@@ -7,8 +7,8 @@ import Comment from "./Sections/Comment";
 
 const VideoDetailPage = props => {
   const [videoDetail, setVideoDetail] = useState([]);
+  const videoId = props.match.params.videoId;
   useEffect(() => {
-    const videoId = props.match.params.videoId;
     const varidable = {
       videoId
     };
@@ -48,7 +48,7 @@ const VideoDetailPage = props => {
             </List.Item>
 
             {/* Comments */}
-            <Comment />
+            <Comment postId={videoId} />
           </div>
         </Col>
         <Col lg={6} xs={24}>
