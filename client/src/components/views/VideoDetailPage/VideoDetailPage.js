@@ -7,6 +7,8 @@ import Comment from "./Sections/Comment";
 
 const VideoDetailPage = props => {
   const [videoDetail, setVideoDetail] = useState([]);
+  const [comments, setComments] = useState([]);
+
   const videoId = props.match.params.videoId;
   useEffect(() => {
     const varidable = {
@@ -19,7 +21,19 @@ const VideoDetailPage = props => {
         alert("비디오 정보를 가져오길 실패했습니다.");
       }
     });
+
+    Axios.post(`/api/comment/getComment`, varidable).then(res => {
+      if (res.data.success) {
+        setComments(res.data.comments);
+      } else {
+        alert("코멘트 정보를 가져오길 실패했습니다.");
+      }
+    });
   }, []);
+
+  const refreshFunc = newComments => {
+    setComments(comments.concat(newComments));
+  };
 
   if (videoDetail.writer) {
     const subscribeButton = videoDetail.writer._id !==
@@ -48,7 +62,11 @@ const VideoDetailPage = props => {
             </List.Item>
 
             {/* Comments */}
-            <Comment postId={videoId} />
+            <Comment
+              postId={videoId}
+              commentList={comments}
+              refreshFunc={refreshFunc}
+            />
           </div>
         </Col>
         <Col lg={6} xs={24}>

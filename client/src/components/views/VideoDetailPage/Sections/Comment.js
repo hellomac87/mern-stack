@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Axios from "axios";
+import SingleComment from "./SingleComment";
 
-const Comment = ({ postId }) => {
+const Comment = ({ postId, commentList, refreshFunc }) => {
   const [commentValue, setCommentValue] = useState("");
   const user = useSelector(state => state.user);
 
@@ -14,12 +15,14 @@ const Comment = ({ postId }) => {
 
     const variables = {
       content: commentValue,
-      write: user.userData._id,
+      writer: user.userData._id,
       postId: postId
     };
     Axios.post(`/api/comment/saveComment`, variables).then(res => {
       if (res.data.success) {
-        console.log(res.data);
+        console.log(res.data.result);
+        setCommentValue("");
+        refreshFunc(res.data.result);
       } else {
         alert("코멘트를 저장하지 못했습니다.");
       }
@@ -32,6 +35,18 @@ const Comment = ({ postId }) => {
       <hr />
 
       {/* comment list */}
+      {commentList &&
+        commentList.map(
+          (comment, idx) =>
+            !comment.responseTo && (
+              <SingleComment
+                key={idx}
+                postId={postId}
+                comment={comment}
+                refreshFunc={refreshFunc}
+              />
+            )
+        )}
 
       {/* root comment form  */}
       <form style={{ display: "flex" }} onSubmit={onSubmit}>

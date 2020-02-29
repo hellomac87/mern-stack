@@ -11,6 +11,7 @@ router.post("/saveComment", (req, res) => {
 
   comment.save((err, comment) => {
     if (err) return res.json({ success: false, err });
+
     Comment.find({ _id: comment._id })
       .populate("writer")
       .exec((err, result) => {
@@ -18,6 +19,15 @@ router.post("/saveComment", (req, res) => {
         res.status(200).json({ success: true, result });
       });
   });
+});
+
+router.post("/getComment", (req, res) => {
+  Comment.find({ postId: req.body.videoId })
+    .populate("writer")
+    .exec((err, comments) => {
+      if (err) return res.json({ success: false, err });
+      res.status(200).json({ success: true, comments });
+    });
 });
 
 module.exports = router;
