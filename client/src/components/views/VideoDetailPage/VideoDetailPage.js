@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Row, Col, List, Avatar } from "antd";
 import Axios from "axios";
 import SideVideo from "./Sections/SideVideo";
@@ -29,11 +29,14 @@ const VideoDetailPage = props => {
         alert("코멘트 정보를 가져오길 실패했습니다.");
       }
     });
-  }, []);
+  }, [videoId]);
 
-  const refreshFunc = newComments => {
-    setComments(comments.concat(newComments));
-  };
+  const refreshFunc = useCallback(
+    newComments => {
+      setComments(comments.concat(newComments));
+    },
+    [comments]
+  );
 
   if (videoDetail.writer) {
     const subscribeButton = videoDetail.writer._id !==

@@ -28,7 +28,7 @@ const Subscribe = ({ userTo, userFrom }) => {
         alert("정보를 받아오지 못했습니다.");
       }
     });
-  }, []);
+  }, [userFrom, userTo]);
 
   const onSubscribe = () => {
     let subscribeVariable = {
