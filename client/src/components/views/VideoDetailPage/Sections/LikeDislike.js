@@ -6,7 +6,7 @@ const LikeDislike = ({ video, videoId, userId, commentId }) => {
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [likeAction, setLikeAction] = useState(null);
-  const [dislikeAction, setdislikeAction] = useState(null);
+  const [dislikeAction, setDislikeAction] = useState(null);
 
   let variable = {};
 
@@ -46,7 +46,7 @@ const LikeDislike = ({ video, videoId, userId, commentId }) => {
         // 내가 이미 그 싫어요를 눌렀는지
         res.data.dislikes.map(dislike => {
           if (dislike.userId === userId) {
-            setdislikeAction("disliked");
+            setDislikeAction("disliked");
           }
         });
       } else {
@@ -54,6 +54,62 @@ const LikeDislike = ({ video, videoId, userId, commentId }) => {
       }
     });
   }, [userId, variable]);
+
+  const onLike = () => {
+    if (likeAction === null) {
+      // 아직 클릭이 안되어있을때
+
+      Axios.post(`/api/like/upLike`, variable).then(res => {
+        if (res.data.success) {
+          setLikes(likes + 1);
+          setLikeAction("liked");
+          if (dislikeAction !== null) {
+            setDislikeAction(null);
+            setDislikes(dislikes - 1);
+          }
+        } else {
+          alert("like 올리지 못했습니다.");
+        }
+      });
+    } else {
+      // 클릭이 되어있을때
+      Axios.post(`/api/like/unLike`, variable).then(res => {
+        if (res.data.success) {
+          setLikes(likes - 1);
+          setLikeAction(null);
+        } else {
+          alert("like 내리지 못했습니다.");
+        }
+      });
+    }
+  };
+
+  const onDislike = () => {
+    if (dislikeAction !== null) {
+      Axios.post(`/api/unDislike`, variable).then(res => {
+        if (res.data.success) {
+          setDislikes(dislikes - 1);
+          setDislikeAction(null);
+        } else {
+          alert("unDislike 못함");
+        }
+      });
+    } else {
+      Axios.post(`/api/upDislike`, variable).then(res => {
+        if (res.data.success) {
+          setDislikes(dislikes + 1);
+          setDislikeAction("disliked");
+
+          if (likeAction !== null) {
+            setLikeAction(null);
+            setLikes(likes - 1);
+          }
+        } else {
+          alert("unDislike 못함");
+        }
+      });
+    }
+  };
   return (
     <div>
       <span key="comment-basic-like">
@@ -61,7 +117,7 @@ const LikeDislike = ({ video, videoId, userId, commentId }) => {
           <Icon
             type="like"
             theme={likeAction === "liked" ? "filled" : "outlined"}
-            onClick
+            onClick={onLike}
           />
         </Tooltip>
         <span style={{ paddingLeft: "8px", cursor: "auto" }}>{likes}</span>
@@ -72,7 +128,7 @@ const LikeDislike = ({ video, videoId, userId, commentId }) => {
           <Icon
             type="dislike"
             theme={dislikeAction === "disliked" ? "filled" : "outlined"}
-            onClick
+            onClick={onDislike}
           />
         </Tooltip>
         <span style={{ paddingLeft: "8px", cursor: "auto" }}>{dislikes}</span>
